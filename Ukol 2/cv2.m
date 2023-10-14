@@ -13,7 +13,7 @@ phase = -pi; % Fazovy posun
 
 n = 0:1:(N - 1); % N potrebne pro jednu periodu
 
-w = Wmax*cos(omega*n*Ts+pi) + 0.5
+w = Wmax*cos(omega*n*Ts+phase) + 0.5
 stem(n,w);
 xlabel('n');
 ylabel('w[n]');
