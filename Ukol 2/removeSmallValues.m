@@ -9,7 +9,7 @@ for q = 1:length(W_k)
     end;
     
     if abs(imag(W_k(q))) < 1e-3
-        W_Im(q)=imag(W_k(q))*0;
+        W_Im(q)=0;
     else W_Im(q)=imag(W_k(q))
     end;
     Wk(q)=W_Re(q)+i*W_Im(q);
