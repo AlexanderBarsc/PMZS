@@ -1,6 +1,7 @@
 clear all
 close all
 
+
 %% Cviceni 3 vypracovani
 
 % Vykreslene signaly m1 a m2
@@ -24,20 +25,128 @@ figure();
 plot(t,m1);
 hold on
 plot(t,m2);
+legend('m1', 'm2')
 ylabel('Amplituda');
 xlabel('Cas (t)');
 title('Vykreslene signaly m1 a m2');
+xlim([0 0.250])
 
 %% Soucet signalu m1 a m2 -> m3
 
 m3 = m1 + m2;
 
 tmaxharmonic = 1/f2;
-tsamplingNew = tmaxharmonic/5;
+tsamplingNew = tmaxharmonic/5; % aspon pet vzorku na periodu
+tfit = tsamplingNew / tsampling; %
 
-tfit = tsamplingNew / tsampling
-
-t2periods = (2*tmaxharmonic)/tsampling
+tMaxHarmonic2periods = (2*tmaxharmonic)/tsampling; % 2 periody nejkratsi periody harmonicky slozky
 
 
-newValues = m3(1:tfit:t2periods); % Vytahneme kazdy petinovy vzorek z periody
+m3new = m3(1:tfit:251); % Vytahneme kazdy petinovy vzorek z periody
+
+t3new = (0:tfit:tfit*10)/1000; 
+
+
+figure()
+plot(t, m3)
+ylabel('Amplituda');
+xlabel('Cas (t)');
+title('Soucet signalu m1 a m2 = signal m3');
+
+figure()
+stem(t3new, m3new)
+hold on
+plot(t, m3)
+ylabel('Amplituda');
+xlabel('Cas (t)');
+title('Puvodni signal a navzorkovany signal m3');
+legend('Navzorkovany m3', 'Puvodni m3')
+xlim([0 0.250])
+
+
+%% PCM kvantovani
+
+figure()
+hold on
+krok = 10/15;
+pcmhladiny = -5:krok:5;
+
+for j = 1: length(pcmhladiny)
+   
+    yline(pcmhladiny(j));
+    
+end
+
+
+
+for i = 1: length(m3new)
+    
+    for j = 1: length(pcmhladiny)
+        
+        if(j == length(pcmhladiny))
+            
+          pcmkvant(i) = pcmhladiny(j)
+            break;
+        end 
+        
+        if(m3new(i) >= pcmhladiny(j) && m3new(i) < pcmhladiny(j + 1))
+            
+            pcmkvant(i) = pcmhladiny(j)
+            break;
+        end
+    
+    end
+    
+end
+
+ylabel('Amplituda');
+xlabel('Cas (t)');
+title('Kvantovany signal zobrazeny s originalnim signalem a hladinami');
+plot(t,m3);
+stem(t3new, pcmkvant)
+xlim([0 0.250])
+
+%% PAM modulace
+
+m3pam(1) = m3new(1)
+t3pam(1) = 0
+
+for i = 1:length(m3new)
+    
+    for j = 1:25
+       
+        if( j < 10)
+            m3pam(end + 1) = m3new(i);
+        elseif(j == 10)
+            m3pam(end + 1) = m3new(i);
+            t3pam(end + 1) = t3pam(end) + 0.001;
+            m3pam(end + 1) = 0;
+            t3pam(end + 1) = t3pam(end);
+            continue;
+        elseif(j == 25)
+            
+            if(i == length(m3new))
+               break; 
+            end
+            m3pam(end + 1) = 0;
+            t3pam(end + 1) = t3pam(end) + 0.001;
+            m3pam(end + 1) = m3new(i + 1);
+            t3pam(end + 1) = t3pam(end);
+            break;
+        else
+            m3pam(end + 1) = 0;
+            
+        end;
+            
+            t3pam(end + 1) = t3pam(end) + 0.001;
+         
+    end
+    
+end
+
+figure()
+plot(t3pam, m3pam)
+
+
+
+
