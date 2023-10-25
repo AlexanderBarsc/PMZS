@@ -147,42 +147,26 @@ xlim([0 0.250])
 ylabel('Amplituda');
 xlabel('Cas (t)');
 title('PCM vystup zobrazeny s puvodnim signalem a kvantovanymi vzorky');
-%% PAM modulace
+%% PWM modulace
 
-
+m3pwm = zeros(1, 25*length(m3new));
+t3pwm = zeros(1, 25*length(m3new));
 
 for i = 1:length(m3new)
     
     value = floor((m3new(i) + 10)/25);
     
     for j = 1:25
+        if(i == 1 && j == 1)
+           index = 1 
+        else if(j == 1)
+            index = (i - 1)*25;
+        end
+        
        
-        if( j < value)
-            m3pam(end + 1) = m3new(i);
-        elseif(j == value)
-            m3pam(end + 1) = m3new(i);
-            t3pam(end + 1) = t3pam(end) + 0.001;
-            m3pam(end + 1) = 0;
-            t3pam(end + 1) = t3pam(end);
-            continue;
-        elseif(j == 25)
-            
-            if(i == length(m3new))
-               break; 
-            end
-            m3pam(end + 1) = 0;
-            t3pam(end + 1) = t3pam(end) + 0.001;
-            m3pam(end + 1) = m3new(i + 1);
-            t3pam(end + 1) = t3pam(end);
-            break;
-        else
-            m3pam(end + 1) = 0;
-            
-        end;
-            
-            t3pam(end + 1) = t3pam(end) + 0.001;
-         
+           
     end
+   
     
 end
 
