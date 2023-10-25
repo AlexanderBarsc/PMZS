@@ -149,7 +149,7 @@ xlabel('Cas (t)');
 title('PCM vystup zobrazeny s puvodnim signalem a kvantovanymi vzorky');
 %% PAM modulace
 
-
+m3pam(1) = 
 
 for i = 1:length(m3new)
     
