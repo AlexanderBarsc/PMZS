@@ -147,34 +147,56 @@ xlim([0 0.250])
 ylabel('Amplituda');
 xlabel('Cas (t)');
 title('PCM vystup zobrazeny s puvodnim signalem a kvantovanymi vzorky');
-%% PWM modulace
+legend('Puvodni signal', 'Kvantovany signal', 'PCM vystup');
+%% PAM modulace
 
-m3pwm = zeros(1, 25*length(m3new));
-t3pwm = zeros(1, 25*length(m3new));
+m3pam(1) = m3new(1)
+t3pam(1) = 0
 
 for i = 1:length(m3new)
-    
-    value = floor((m3new(i) + 10)/25);
-    
+
     for j = 1:25
-        if(i == 1 && j == 1)
-           index = 1 
-        else if(j == 1)
-            index = (i - 1)*25;
-        end
-        
-       
-           
+
+        if( j < 10)
+            m3pam(end + 1) = m3new(i);
+        elseif(j == 10)
+            m3pam(end + 1) = m3new(i);
+            t3pam(end + 1) = t3pam(end) + 0.001;
+            m3pam(end + 1) = 0;
+            t3pam(end + 1) = t3pam(end);
+            continue;
+        elseif(j == 25)
+
+            if(i == length(m3new))
+               break; 
+            end
+            m3pam(end + 1) = 0;
+            t3pam(end + 1) = t3pam(end) + 0.001;
+            m3pam(end + 1) = m3new(i + 1);
+            t3pam(end + 1) = t3pam(end);
+            break;
+        else
+            m3pam(end + 1) = 0;
+
+        end;
+
+            t3pam(end + 1) = t3pam(end) + 0.001;
+
     end
-   
-    
+
 end
 
 figure()
 plot(t3pam, m3pam)
 hold on
+stem(t3new, m3new)
 plot(t,m3);
+xlim([0 0.250])
 
+legend('PAM modulace', 'm3 vzorkovany', 'Puvodni signal m3')
+ylabel('Amplituda');
+xlabel('Cas (t)');
+title('PAM modulace aplikovana na vzorkovany signal m3');
 
 
 
